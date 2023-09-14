@@ -21,7 +21,9 @@
     "sweetalert2": "^11.7.20"
   },
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "node server.js"
+    
+
   },
   "engines": {
     "node": ">=14.20.1"
