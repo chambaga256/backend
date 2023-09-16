@@ -23,6 +23,7 @@ function sendCertificateAwardEmailToInstitution(
   pladge,
   institutionEmail,
   name,
+  phoneNumber,
   certificateName,
   completeFile,
   institution
@@ -35,7 +36,7 @@ function sendCertificateAwardEmailToInstitution(
     html: `
       <p>Hello,</p>
       <p>Your  Client in names of  ${name}  has been awarded a cerficate   for ${pladge} And  promised to  keep the pladge..</p>
-      <p>Thanks management  ${institution}.</p>
+      <p>Phone ${phoneNumber}.</p>
     `,
     attachments: [
       {
@@ -187,6 +188,7 @@ router.post("/", async (req, res) => {
           req.body.pladge,
           req.body.institutionEmail,
           req.body.name,
+          req.body.phoneNumber,
           certificateName,
           completeFile,
           req.body.institution
@@ -436,7 +438,8 @@ router.post("/", async (req, res) => {
     email: req.body.email,
     institutionEmail: req.body.institutionEmail,
     amount: req.body.amount,
-    frequency: req.body.frequency,
+    phoneNumber: req.body,
+    frequency: req.body.frequency.phoneNumber,
     institution: req.body.institution,
   });
 
