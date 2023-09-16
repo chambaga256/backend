@@ -59,8 +59,7 @@ function validateCertifacte(certificate) {
     email: Joi.string().max(50).required(),
     institutionEmail: Joi.string().max(50).required(),
     amount: Joi.number().required(),
-    phoneNumber: Joi.string().required().max(50).required(),
-
+    phoneNumber: Joi.string().max(50).required(),
     frequency: Joi.string().max(50).required(),
     institution: Joi.string().max(50).required(),
   };

@@ -438,8 +438,8 @@ router.post("/", async (req, res) => {
     email: req.body.email,
     institutionEmail: req.body.institutionEmail,
     amount: req.body.amount,
-    phoneNumber: req.body,
-    frequency: req.body.frequency.phoneNumber,
+    phoneNumber: req.body.phoneNumber,
+    frequency: req.body.frequency,
     institution: req.body.institution,
   });
 
