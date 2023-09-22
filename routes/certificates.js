@@ -400,7 +400,7 @@ router.post("/", async (req, res) => {
     fit: [200, 70],
     align: "center",
   });
-  doc.image("assets/logo3.jpg", 560, 470, {
+  doc.image("assets/logo3.jpg", 540, 470, {
     fit: [200, 100],
     align: "right",
   });
