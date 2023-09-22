@@ -389,7 +389,7 @@ router.post("/", async (req, res) => {
 
   jumpLine(doc, 4);
 
-  // Validation link
+  // Validation liatnk
   const link = `https://radiographyvideoupload.s3.ap-northeast-1.amazonaws.com/Certificates/${req.body.pladge}-${req.body.name}-certificate.pdf`;
 
   doc.image("assets/bankers association.jpg", 100, 450, {
@@ -397,7 +397,7 @@ router.post("/", async (req, res) => {
     align: "left",
   });
   doc.image("assets/bou.jpg", 270, 450, {
-    fit: [200, 0],
+    fit: [200, 90],
     align: "center",
   });
   doc.image("assets/logo3.jpg", 560, 470, {
