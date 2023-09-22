@@ -392,11 +392,11 @@ router.post("/", async (req, res) => {
   // Validation link
   const link = `https://radiographyvideoupload.s3.ap-northeast-1.amazonaws.com/Certificates/${req.body.pladge}-${req.body.name}-certificate.pdf`;
 
-  doc.image("assets/bou.jpg", 100, 450, {
+  doc.image("assets/bankers association.jpg", 270, 470, {
     fit: [200, 100],
     align: "left",
   });
-  doc.image("assets/bankers association.jpg", 270, 470, {
+  doc.image("assets/bou.jpg", 100, 400, {
     fit: [200, 100],
     align: "center",
   });
