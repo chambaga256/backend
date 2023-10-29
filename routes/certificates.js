@@ -35,16 +35,9 @@ function sendCertificateAwardEmailToInstitution(
     subject: "Certificate Award",
     html: `
       <p>Hello,</p>
-      <p>Your  Client in names of  ${name}  has been awarded a cerficate   for ${pladge} And  promised to  keep the pladge..</p>
+      <p>Your  Client in names of  ${name}  has been awarded a  Pledge cerficate    And  promised to  Follow  50,20,30  rule for personal financial willingness 2023-2024 </p>
       <p>Phone ${phoneNumber}.</p>
     `,
-    attachments: [
-      {
-        filename: certificateName,
-        content: completeFile, // This should be the content of your PDF file
-        contentType: "application/pdf",
-      },
-    ],
   };
 
   // Send the email...
@@ -76,7 +69,7 @@ function sendCertificateAwardEmail(
     subject: "Certificate Award",
     html: `
       <p>Hello ${name},</p>
-      <p>You have been approved and Awarded  a certificate   for ${pladge} And please keep the pladge..</p>
+      <p>You have been  Awarded  a pledge certificate And  Promise to follow 50,20,30 rule for your personal financila willingness 2023-2024 </p>
       <p>Thanks for saving with the ${institution}.</p>
     `,
     attachments: [
@@ -279,7 +272,7 @@ router.post("/", async (req, res) => {
     .font("fonts/NotoSansJP-Light.otf")
     .fontSize(10)
     .fill("#021c27")
-    .text(`I Have Pledged  ${req.body.amount} UGX  For ${req.body.pladge}  `, {
+    .text(`I Have Pledged    For ${req.body.pladge}  `, {
       align: "center",
     });
 

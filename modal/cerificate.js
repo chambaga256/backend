@@ -7,12 +7,12 @@ const certificateSchema = new mongoose.Schema({
     required: true,
     maxlength: 50,
   },
-  pladge: {
-    // Corrected field name to "pledge"
-    type: String,
-    required: true,
-    maxlength: 50,
-  },
+  // pladge: {
+
+  // type: String,
+  // required: true,
+  // maxlength: 50,
+  // },
 
   link: {
     type: String,
@@ -27,10 +27,10 @@ const certificateSchema = new mongoose.Schema({
     required: true,
   },
 
-  amount: {
-    type: Number,
-    required: true,
-  },
+  // amount: {
+  //   type: Number,
+  //   required: true,
+  // },
   phoneNumber: {
     type: String,
     required: true,
@@ -55,10 +55,10 @@ const Certificate = mongoose.model("Certificate", certificateSchema);
 function validateCertifacte(certificate) {
   const schema = {
     name: Joi.string().max(50).required(),
-    pladge: Joi.string().max(50).required(),
+
     email: Joi.string().max(50).required(),
     institutionEmail: Joi.string().max(50).required(),
-    amount: Joi.number().required(),
+    // amount: Joi.number().required(),
     phoneNumber: Joi.string().max(50).required(),
     frequency: Joi.string().max(50).required(),
     institution: Joi.string().max(50).required(),
