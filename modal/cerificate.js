@@ -55,10 +55,10 @@ const Certificate = mongoose.model("Certificate", certificateSchema);
 function validateCertifacte(certificate) {
   const schema = {
     name: Joi.string().max(50).required(),
-    pladge: Joi.string().max(50),
+    pladge: Joi.string().max(50).required(),
     email: Joi.string().max(50).required(),
     institutionEmail: Joi.string().max(50).required(),
-    amount: Joi.number(),
+    amount: Joi.number().required(),
     phoneNumber: Joi.string().max(50).required(),
     frequency: Joi.string().max(50).required(),
     institution: Joi.string().max(50).required(),
