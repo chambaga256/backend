@@ -272,9 +272,12 @@ router.post("/", async (req, res) => {
     .font("fonts/NotoSansJP-Light.otf")
     .fontSize(10)
     .fill("#021c27")
-    .text(`I Have Pledged    For ${req.body.pladge}  `, {
-      align: "center",
-    });
+    .text(
+      `I Pledge To Follow 50,20,30 Rule For My Financial Willingness  2023-2024 `,
+      {
+        align: "center",
+      }
+    );
 
   jumpLine(doc, 7);
 
