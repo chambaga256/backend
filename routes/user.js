@@ -30,6 +30,7 @@ router.post("/register", async (req, res) => {
   //get users token
   const token = user.generateAuthToken();
   console.log("user  token  is here", token);
+  res.send(token);
   //Send back the response to the client..
   res.status(200).send("user Registered successfully");
 });
