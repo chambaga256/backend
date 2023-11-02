@@ -18,7 +18,7 @@ app.use(express.json());
 
 mongoose
   .connect(
-    "mongodb+srv://chambagaabdulmurs:chambaga256@cluster0.xetqawq.mongodb.net/uibfs",
+    "mongodb+srv://chambagaabdulmurs:chambaga256@cluster0.xetqawq.mongodb.net/pledge",
     // "mongodb+srv://rsemakula201687:rsemakula201687@cluster0.y5xjvna.mongodb.net/uibfs",
     {
       useNewUrlParser: true,
