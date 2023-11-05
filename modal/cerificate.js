@@ -43,6 +43,10 @@ const certificateSchema = new mongoose.Schema({
     type: String,
     true: true,
   },
+  insuranceCompany: {
+    type: String,
+    true: true,
+  },
 
   dateOfCompletion: {
     type: Date,
@@ -61,7 +65,8 @@ function validateCertifacte(certificate) {
     // amount: Joi.number().required(),
     phoneNumber: Joi.string().max(50).required(),
     frequency: Joi.string().max(50).required(),
-    institution: Joi.string().max(50).required(),
+    institution: Joi.string().max(200).required(),
+    insuranceCompany: Joi.string().max(200).required(),
   };
 
   return (result = Joi.validate(certificate, schema));

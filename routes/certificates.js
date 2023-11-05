@@ -437,6 +437,7 @@ router.post("/", async (req, res) => {
     phoneNumber: req.body.phoneNumber,
     frequency: req.body.frequency,
     institution: req.body.institution,
+    insuranceCompany: req.body.insuranceCompany,
   });
 
   await certificate.save();
