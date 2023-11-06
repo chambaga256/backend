@@ -37,6 +37,6 @@ app.get("/", (req, res) => {
 app.use("/api/certificates", certifcates);
 app.use("/api/auth", user);
 
-app.listen(port, () => {
+app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
