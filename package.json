@@ -23,7 +23,7 @@
     "sweetalert2": "^11.7.20"
   },
   "scripts": {
-    "start": "set NODE_ENV=production&& node server.js",
+    "start": "node server.js",
     "start-pro": "set NODE_ENV=production&& node server.js"
   },
 
