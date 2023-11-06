@@ -3,7 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const certifcates = require("./routes/certificates");
 const cors = require("cors");
-const port = 7001;
+const PORT = process.env.PORT || 3000;
 const user = require("./routes/user");
 
 const app = express();
@@ -38,5 +38,5 @@ app.use("/api/certificates", certifcates);
 app.use("/api/auth", user);
 
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`Server is running on port ${PORT}`);
 });
