@@ -31,7 +31,9 @@ mongoose
   .catch((err) => {
     console.error("Error connecting to MongoDB Atlas:", err);
   });
-
+app.get("/", (req, res) => {
+  res.send("Hello, World! This is the home page.");
+});
 app.use("/api/certificates", certifcates);
 app.use("/api/auth", user);
 
