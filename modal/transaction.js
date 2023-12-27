@@ -16,7 +16,7 @@ const transactionSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    phoneNumber: {
+    createdBy: {
       type: String,
     },
   },
@@ -27,8 +27,8 @@ const Transaction = mongoose.model("Transaction", transactionSchema);
 function validateTransaction(transaction) {
   const schema = {
     item: Joi.string().required(),
-    amount: Joi.string().required(),
-    quantity: Joi.string().required(),
+    amount: Joi.number().required(),
+    quantity: Joi.number().required(),
   };
 
   return (result = Joi.validate(transaction, schema));
