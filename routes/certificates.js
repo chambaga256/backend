@@ -7,6 +7,7 @@ const { Certificate, validateCertifacte } = require("../modal/cerificate");
 
 const nodemailer = require("nodemailer");
 const express = require("express");
+const { decodeToken } = require("../helpers/decodeToken");
 const router = express.Router();
 
 // Configuration of the transporter for notification Email.
@@ -96,16 +97,15 @@ function sendCertificateAwardEmail(
 
 // IMPLMEMENTING THE ROUTES....
 router.get("/", async (req, res) => {
-  const certificates = await Certificate.find();
-  res.send(certificates);
-});
+  const token = req.header("Authorization");
+  let certificates;
 
-// Getting all certificates for a given user...
-router.get("/:email", async (req, res) => {
-  const certificates = await Certificate.find({
-    email: req.params.email,
-  });
-
+  if (!token) {
+    certificates = await Certificate.find();
+  } else {
+    const decodedToken = decodeToken(token);
+    certificates = await Certificate.find({ email: decodedToken.email });
+  }
   res.send(certificates);
 });
 
