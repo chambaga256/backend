@@ -5,7 +5,7 @@ const { decodeToken } = require("../helpers/decodeToken");
 const router = express.Router();
 
 // returns all transactions/expenses
-router.get("/", async (req, res) => {
+router.get("/transactions", async (req, res) => {
   const token = req.header("Authorization");
   let transactions;
 
