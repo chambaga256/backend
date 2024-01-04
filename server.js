@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const certifcates = require("./routes/certificates");
 const transactions = require("./routes/transaction");
+const incomes = require("./routes/income");
 const cors = require("cors");
 const PORT = process.env.PORT || 3000;
 const user = require("./routes/user");
@@ -37,6 +38,7 @@ app.get("/", (req, res) => {
 });
 app.use("/api/certificates", certifcates);
 app.use("/api/transactions", transactions);
+app.use("/api/incomes", incomes);
 app.use("/api/auth", user);
 
 app.listen(PORT, () => {
