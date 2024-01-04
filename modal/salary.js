@@ -18,7 +18,7 @@ const incomeSalary = new mongoose.Schema(
 const Salary = mongoose.model("salary", incomeSalary);
 function validateSalary(salary) {
   const schema = {
-    income: Joi.string().required(),
+  
     amount: Joi.number().required(),
    
   };
