@@ -1,21 +1,21 @@
 const express = require("express"); 
 const { decodeToken } = require("../helpers/decodeToken");
-const { Income, validateIncome } = require("../modal/income");
+const { Salary, validateSalary } = require("../modal/salary");
 
 const router = express.Router();
 
 // returns all transactions/expenses
-router.get("/income", async (req, res) => {
+router.get("/salary", async (req, res) => {
   const token = req.header("Authorization");
   let incomes;
 
   if (!token) {
     // return all transactions for admin
-    incomes = await Income.find();
+    incomes = await Salary.find();
   } else {
     // return all transactions for logged in user
     const decodedToken = decodeToken(token);
-    incomes = await Income.find({ createdBy: decodedToken._id });
+    incomes = await Salary.find({ createdBy: decodedToken._id });
   }
 
   // send all transactions
@@ -23,7 +23,7 @@ router.get("/income", async (req, res) => {
 });
 
 // create a new transaction/expense
-router.post("/income", async (req, res) => {
+router.post("/salary", async (req, res) => {
   const token = req.header("Authorization");
   
   if (!token) {
@@ -31,22 +31,22 @@ router.post("/income", async (req, res) => {
   }
 
   // validate incoming data
-  const { error } = validateIncome(req.body);
+  const { error } = validateSalary(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   // create a new transaction instance
   const decodedToken = decodeToken(token);
-  const income= new Income({
+  const income= new Salary({
     ...req.body,
     createdBy: decodedToken._id,
   });
 
   try {
     // save the transaction to the database
-    const savedIncomes = await income.save();
+    const savedSalary = await income.save();
 
     // send the saved transaction as a response
-    res.status(200).send(savedIncomes);
+    res.status(200).send(savedSalary);
   } catch (err) {
     res.status(500).send("Internal Server Error");
   }
