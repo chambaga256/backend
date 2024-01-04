@@ -7,19 +7,19 @@ const router = express.Router();
 // returns all transactions/expenses
 router.get("/salary", async (req, res) => {
   const token = req.header("Authorization");
-  let incomes;
+  let salaries;
 
   if (!token) {
     // return all transactions for admin
-    incomes = await Salary.find();
+    salaries = await Salary.find();
   } else {
     // return all transactions for logged in user
     const decodedToken = decodeToken(token);
-    incomes = await Salary.find({ createdBy: decodedToken._id });
+    salaries = await Salary.find({ createdBy: decodedToken._id });
   }
 
   // send all transactions
-  res.send(incomes);
+  res.send(salaries);
 });
 
 // create a new transaction/expense
