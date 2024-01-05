@@ -72,7 +72,7 @@ router.put("/salary/:id", async (req, res) => {
       _id: req.params.id,
       createdBy: decodedToken._id,
     });
-
+    console.log("salary...", salary);
     if (!salary) {
       return res.status(404).send("Salary record not found");
     }
