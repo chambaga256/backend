@@ -12,8 +12,9 @@ const goalSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-   
-    createdBy: {s
+
+    createdBy: {
+      type: String,
     },
   },
   { timestamps: true }
@@ -24,11 +25,10 @@ function validateGoal(goal) {
   const schema = {
     goal: Joi.string().required(),
     amount: Joi.number().required(),
-   
   };
 
   return (result = Joi.validate(goal, schema));
 }
 
 module.exports.Goal = Goal;
-module.exports.validateGoal= validateGoal;
+module.exports.validateGoal = validateGoal;
