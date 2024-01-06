@@ -5,6 +5,7 @@ const certifcates = require("./routes/certificates");
 const transactions = require("./routes/transaction");
 const incomes = require("./routes/income");
 const salaries =require("./routes/salary")
+const gaols =require('./routes/setgoal')
 const cors = require("cors");
 const PORT = process.env.PORT || 3000;
 const user = require("./routes/user");
@@ -41,6 +42,7 @@ app.use("/api/certificates", certifcates);
 app.use("/api/transactions", transactions);
 app.use("/api/incomes", incomes);
 app.use("/api/salaries", salaries);
+app.use("/api/goal", gaols);
 app.use("/api/auth", user);
 
 app.listen(PORT, () => {
