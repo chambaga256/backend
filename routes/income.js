@@ -62,6 +62,16 @@ router.post("/income", async (req, res) => {
 
   // create a new transaction instance
   const decodedToken = decodeToken(token);
+
+  // before adding new income, get previous total
+  const previousIncomes = await Income.find({ createdBy: decodedToken._id });
+  // Calculate total amount
+  const previousIncomeTotal = previousIncomes.reduce(
+    (acc, income) => acc + income.amount,
+    0
+  );
+
+  // add new income
   const income = new Income({
     ...req.body,
     createdBy: decodedToken._id,
@@ -72,7 +82,7 @@ router.post("/income", async (req, res) => {
     const savedIncomes = await income.save();
 
     // send the saved transaction as a response
-    res.status(200).send(savedIncomes);
+    res.status(200).send({ previousIncomeTotal, savedIncomes });
   } catch (err) {
     res.status(500).send("Internal Server Error");
   }
