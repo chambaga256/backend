@@ -1,8 +1,34 @@
-const express = require("express"); 
+const express = require("express");
 const { decodeToken } = require("../helpers/decodeToken");
 const { Income, validateIncome } = require("../modal/income");
 
 const router = express.Router();
+
+// returns user income summary
+router.get("/summary", async (req, res) => {
+  try {
+    const token = req.header("Authorization");
+    let incomes;
+
+    if (!token) {
+      // return all income for admin
+      incomes = await Income.find();
+    } else {
+      // return all income for logged in user
+      const decodedToken = decodeToken(token);
+      incomes = await Income.find({ createdBy: decodedToken._id });
+    }
+
+    // Calculate total amount
+    const totalIncome = incomes.reduce((acc, income) => acc + income.amount, 0);
+
+    // Send all incomes along with total amount
+    res.send({ totalIncome, incomes });
+  } catch (error) {
+    console.error("Error fetching income summary:", error);
+    res.status(500).send({ error: "Internal Server Error" });
+  }
+});
 
 // returns all transactions/expenses
 router.get("/income", async (req, res) => {
@@ -25,7 +51,7 @@ router.get("/income", async (req, res) => {
 // create a new transaction/expense
 router.post("/income", async (req, res) => {
   const token = req.header("Authorization");
-  
+
   if (!token) {
     return res.status(401).send("Unauthorized");
   }
@@ -36,7 +62,7 @@ router.post("/income", async (req, res) => {
 
   // create a new transaction instance
   const decodedToken = decodeToken(token);
-  const income= new Income({
+  const income = new Income({
     ...req.body,
     createdBy: decodedToken._id,
   });
