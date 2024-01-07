@@ -4,6 +4,35 @@ const { decodeToken } = require("../helpers/decodeToken");
 
 const router = express.Router();
 
+// return summary of transactions
+router.get("/summary", async (req, res) => {
+  try {
+    const token = req.header("Authorization");
+    let transactions;
+
+    if (!token) {
+      // return all transactions for admin
+      transactions = await Transaction.find();
+    } else {
+      // return all transactions for logged in user
+      const decodedToken = decodeToken(token);
+      transactions = await Transaction.find({ createdBy: decodedToken._id });
+    }
+
+    // Calculate total amount
+    const totalAmount = transactions.reduce(
+      (acc, transaction) => acc + transaction.amount,
+      0
+    );
+
+    // Send all transactions along with total amount
+    res.send({ totalAmount, transactions });
+  } catch (error) {
+    console.error("Error fetching transactions:", error);
+    res.status(500).send({ error: "Internal Server Error" });
+  }
+});
+
 // returns all transactions/expenses
 router.get("/transactions", async (req, res) => {
   const token = req.header("Authorization");
