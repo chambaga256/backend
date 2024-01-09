@@ -28,7 +28,7 @@ function validateTransaction(transaction) {
   const schema = {
     item: Joi.string().required(),
     amount: Joi.number().required(),
-    quantity: Joi.number().required(),
+    category: Joi.string().required(),
   };
 
   return (result = Joi.validate(transaction, schema));
