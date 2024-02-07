@@ -39,8 +39,8 @@ userSchema.methods.generateAuthToken = function () {
   const token = jwt.sign(
     {
       _id: this._id,
-      name: this._name,
-      contact: this._contact,
+      name: this.name,
+      contact: this.contact,
       email: this.email,
     },
     process.env.PRIVATEKEY
