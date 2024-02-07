@@ -5,6 +5,12 @@ const config = require("config");
 require("dotenv").config();
 
 const userSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    minlength: 10,
+    maxlength: 13,
+  },
   contact: {
     type: String,
     required: true,
@@ -46,6 +52,7 @@ const User = mongoose.model("User", userSchema);
 
 function validateUser(user) {
   const schema = {
+    name: Joi.string().min(4).max(200),
     contact: Joi.string().min(10).max(13),
     email: Joi.string().min(5).max(255).email().required(),
     password: Joi.string().min(5).max(255).required(),

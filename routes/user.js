@@ -19,7 +19,7 @@ router.post("/register", async (req, res) => {
   let user = await User.findOne({ email: req.body.email });
   if (user) return res.status(400).send("User already registered ..");
 
-  user = new User(_.pick(req.body, ["contact", "email", "password"]));
+  user = new User(_.pick(req.body, ["name", "contact", "email", "password"]));
 
   // encrypt the password sent by the user.
   const salt = await bcrypt.genSalt(10);
