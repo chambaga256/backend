@@ -4,11 +4,14 @@ const mongoose = require("mongoose");
 const certifcates = require("./routes/certificates");
 const transactions = require("./routes/transaction");
 const incomes = require("./routes/income");
-const salaries =require("./routes/salary")
-const gaols =require('./routes/setgoal')
+const salaries = require("./routes/salary");
+const gaols = require("./routes/setgoal");
 const cors = require("cors");
 const PORT = process.env.PORT || 3000;
 const user = require("./routes/user");
+const wants = require("./routes/wants");
+const savings = require("./routes/savings");
+const needs = require("./routes/needs");
 
 const app = express();
 
@@ -44,6 +47,9 @@ app.use("/api/incomes", incomes);
 app.use("/api/salaries", salaries);
 app.use("/api/goal", gaols);
 app.use("/api/auth", user);
+app.use("/api/rules", wants);
+app.use("/api/rules", savings);
+app.use("/api/rules", needs);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
