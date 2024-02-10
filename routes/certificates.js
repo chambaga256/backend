@@ -392,7 +392,7 @@ router.post("/", async (req, res) => {
     fit: [200, 100],
     align: "left",
   });
-  doc.image("assets/bou.jpg", 270, 450, {
+  doc.image("assets/bou.jpg", 300, 450, {
     fit: [200, 72],
     align: "center",
   });
