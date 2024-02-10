@@ -284,104 +284,104 @@ router.post("/", async (req, res) => {
   doc.lineWidth(1);
 
   // Signatures
-  const lineSize = 174;
-  const signatureHeight = 390;
+  // const lineSize = 174;
+  // const signatureHeight = 390;
 
-  doc.fillAndStroke("#021c27");
-  doc.strokeOpacity(0.2);
+  // doc.fillAndStroke("#021c27");
+  // doc.strokeOpacity(0.2);
 
-  const startLine1 = 128;
-  const endLine1 = 128 + lineSize;
-  doc
-    .moveTo(startLine1, signatureHeight)
-    .lineTo(endLine1, signatureHeight)
-    .stroke();
+  // const startLine1 = 128;
+  // const endLine1 = 128 + lineSize;
+  // doc
+  //   .moveTo(startLine1, signatureHeight)
+  //   .lineTo(endLine1, signatureHeight)
+  //   .stroke();
 
-  const startLine2 = endLine1 + 32;
-  const endLine2 = startLine2 + lineSize;
-  doc
-    .moveTo(startLine2, signatureHeight)
-    .lineTo(endLine2, signatureHeight)
-    .stroke();
+  // const startLine2 = endLine1 + 32;
+  // const endLine2 = startLine2 + lineSize;
+  // doc
+  //   .moveTo(startLine2, signatureHeight)
+  //   .lineTo(endLine2, signatureHeight)
+  //   .stroke();
 
-  const startLine3 = endLine2 + 32;
-  const endLine3 = startLine3 + lineSize;
-  doc
-    .moveTo(startLine3, signatureHeight)
-    .lineTo(endLine3, signatureHeight)
-    .stroke();
+  // const startLine3 = endLine2 + 32;
+  // const endLine3 = startLine3 + lineSize;
+  // doc
+  //   .moveTo(startLine3, signatureHeight)
+  //   .lineTo(endLine3, signatureHeight)
+  //   .stroke();
 
-  doc
-    .font("fonts/NotoSansJP-Bold.otf")
-    .fontSize(10)
-    .fill("#021c27")
-    .text("Mr. Michael Mugabi", startLine1, signatureHeight + 10, {
-      columns: 1,
-      columnGap: 0,
-      height: 40,
-      width: lineSize,
-      align: "center",
-    });
+  // doc
+  //   .font("fonts/NotoSansJP-Bold.otf")
+  //   .fontSize(10)
+  //   .fill("#021c27")
+  //   .text("Mr. Michael Mugabi", startLine1, signatureHeight + 10, {
+  //     columns: 1,
+  //     columnGap: 0,
+  //     height: 40,
+  //     width: lineSize,
+  //     align: "center",
+  //   });
 
-  doc
-    .font("fonts/NotoSansJP-Light.otf")
-    .fontSize(10)
-    .fill("#021c27")
-    .text(" Managing Director  Uibfs", startLine1, signatureHeight + 25, {
-      columns: 1,
-      columnGap: 0,
-      height: 40,
-      width: lineSize,
-      align: "center",
-    });
+  // doc
+  //   .font("fonts/NotoSansJP-Light.otf")
+  //   .fontSize(10)
+  //   .fill("#021c27")
+  //   .text(" Managing Director  Uibfs", startLine1, signatureHeight + 25, {
+  //     columns: 1,
+  //     columnGap: 0,
+  //     height: 40,
+  //     width: lineSize,
+  //     align: "center",
+  //   });
 
-  doc
-    .font("fonts/NotoSansJP-Bold.otf")
-    .fontSize(10)
-    .fill("#021c27")
-    .text("Ms. Goretti Masadde ", startLine2, signatureHeight + 10, {
-      columns: 1,
-      columnGap: 0,
-      height: 40,
-      width: lineSize,
-      align: "center",
-    });
+  // doc
+  //   .font("fonts/NotoSansJP-Bold.otf")
+  //   .fontSize(10)
+  //   .fill("#021c27")
+  //   .text("Ms. Goretti Masadde ", startLine2, signatureHeight + 10, {
+  //     columns: 1,
+  //     columnGap: 0,
+  //     height: 40,
+  //     width: lineSize,
+  //     align: "center",
+  //   });
 
-  doc
-    .font("fonts/NotoSansJP-Light.otf")
-    .fontSize(10)
-    .fill("#021c27")
-    .text("Ceo uibfs", startLine2, signatureHeight + 25, {
-      columns: 1,
-      columnGap: 0,
-      height: 40,
-      width: lineSize,
-      align: "center",
-    });
+  // doc
+  //   .font("fonts/NotoSansJP-Light.otf")
+  //   .fontSize(10)
+  //   .fill("#021c27")
+  //   .text("Ceo uibfs", startLine2, signatureHeight + 25, {
+  //     columns: 1,
+  //     columnGap: 0,
+  //     height: 40,
+  //     width: lineSize,
+  //     align: "center",
+  //   });
 
-  doc
-    .font("fonts/NotoSansJP-Bold.otf")
-    .fontSize(10)
-    .fill("#021c27")
-    .text("Jhon Amin", startLine3, signatureHeight + 10, {
-      columns: 1,
-      columnGap: 0,
-      height: 40,
-      width: lineSize,
-      align: "center",
-    });
+  // doc
+  //   .font("fonts/NotoSansJP-Bold.otf")
+  //   .fontSize(10)
+  //   .fill("#021c27")
+  //   .text("Jhon Amin", startLine3, signatureHeight + 10, {
+  //     columns: 1,
+  //     columnGap: 0,
+  //     height: 40,
+  //     width: lineSize,
+  //     align: "center",
+  //   });
 
-  doc
-    .font("fonts/NotoSansJP-Light.otf")
-    .fontSize(10)
-    .fill("#021c27")
-    .text("Director centinary group", startLine3, signatureHeight + 25, {
-      columns: 1,
-      columnGap: 0,
-      height: 40,
-      width: lineSize,
-      align: "center",
-    });
+  // doc
+  //   .font("fonts/NotoSansJP-Light.otf")
+  //   .fontSize(10)
+  //   .fill("#021c27")
+  //   .text("Director centinary group", startLine3, signatureHeight + 25, {
+  //     columns: 1,
+  //     columnGap: 0,
+  //     height: 40,
+  //     width: lineSize,
+  //     align: "center",
+  //   });
 
   jumpLine(doc, 4);
 
