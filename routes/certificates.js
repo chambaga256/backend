@@ -36,7 +36,7 @@ function sendCertificateAwardEmailToInstitution(
     subject: "Certificate Award",
     html: `
       <p>Hello,</p>
-      <p>Your  Client in names of  ${name}  has been awarded a  Pledge cerficate    And  promised to  Follow  50,20,30  rule for personal financial willingness 2023-2024 </p>
+      <p>Your  client in the names of  ${name}  has been awarded a  pledge cerficate    and  promised to  follow  50,20,30  rule for personal financial wellness 2023-2024 </p>
       <p>Phone ${phoneNumber}.</p>
     `,
   };
@@ -70,7 +70,7 @@ function sendCertificateAwardEmail(
     subject: "Certificate Award",
     html: `
       <p>Hello ${name},</p>
-      <p>You have been  Awarded  a pledge certificate And  Promise to follow 50,20,30 rule for your personal financila willingness 2023-2024 </p>
+      <p>You have been  awarded  a pledge certificate and  promise to follow 50,20,30 rule for your personal financial wellness 2023-2024 </p>
       <p>Thanks for saving with the ${institution}.</p>
     `,
     attachments: [

@@ -65,8 +65,8 @@ function validateCertifacte(certificate) {
     // amount: Joi.number().required(),
     phoneNumber: Joi.string().max(50).required(),
     frequency: Joi.string().max(50).required(),
-    institution: Joi.string().max(200).required(),
-    insuranceCompany: Joi.string().max(200).required(),
+    institution: Joi.string().max(200),
+    insuranceCompany: Joi.string().max(200),
   };
 
   return (result = Joi.validate(certificate, schema));
