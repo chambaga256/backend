@@ -12,7 +12,10 @@ const goalSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-
+    peroid: {
+      type: Number,
+      required: true,
+    },
     createdBy: {
       type: String,
     },
@@ -25,6 +28,7 @@ function validateGoal(goal) {
   const schema = {
     goal: Joi.string().required(),
     amount: Joi.number().required(),
+    peroid: Joi.number().required(),
   };
 
   return (result = Joi.validate(goal, schema));
