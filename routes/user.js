@@ -47,7 +47,10 @@ router.post("/login", async (req, res) => {
   //   if (error) return res.status(400).send(error.details[0].message);
 
   let user = await User.findOne({ contact: req.body.contact });
-  if (!user) return res.status(400).send("User Not Registered...");
+  if (!user)
+    return res
+      .status(400)
+      .send("Please Signup, Your Contact Was Found in Our System ");
 
   const validPassword = await bcrypt.compare(req.body.password, user.password);
 
