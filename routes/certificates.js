@@ -159,7 +159,7 @@ router.post("/", async (req, res) => {
         // uploading the object to  the bucket...
         await aggregatedS3.putObject(
           {
-            Key: `Certificates/${req.body.pladge}-${req.body.name}-certificate.pdf`,
+            Key: `certificates/${req.body.pladge}-${req.body.name}-certificate.pdf`,
             Bucket: "eu-north-1",
             Body: fs.createReadStream(pdfFilePath),
             ContentType: "application/pdf",
@@ -386,7 +386,7 @@ router.post("/", async (req, res) => {
   jumpLine(doc, 4);
 
   // Validation liatnk
-  const link = `https://uibfs.s3.eu-north-1.amazonaws.com/Certificates/${req.body.pladge}-${req.body.name}-certificate.pdf`;
+  const link = `https://uibfs.s3.eu-north-1.amazonaws.com/certificates/${req.body.pladge}-${req.body.name}-certificate.pdf`;
 
   doc.image("assets/bankers association.jpg", 100, 450, {
     fit: [200, 100],
