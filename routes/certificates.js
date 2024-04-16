@@ -160,7 +160,7 @@ router.post("/", async (req, res) => {
         await aggregatedS3.putObject(
           {
             Key: `uibfs/${req.body.pladge}-${req.body.name}-certificate.pdf`,
-            Bucket: "eu-north-1",
+            Bucket: process.env.S3_BUCKET_NAME,
             Body: fs.createReadStream(pdfFilePath),
             ContentType: "application/pdf",
           },
