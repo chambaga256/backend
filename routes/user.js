@@ -17,7 +17,9 @@ router.post("/register", async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   let user = await User.findOne({ contact: req.body.contact });
-  if (user) return res.status(400).send("User already registered ..");
+
+
+  if (user) return res.status(400).send("This number is already registered in our system ..");
 
   user = new User(_.pick(req.body, ["name", "contact", "email", "password"]));
 
