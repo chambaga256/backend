@@ -96,6 +96,32 @@ router.post("/resetpassword", async (req, res) => {
     res.status(500).send("Server error");
   }
 });
+function validateUserUpdate(req) {
+  const schema = Joi.object({
+    name: Joi.string().min(3).max(50).optional(),
+    email: Joi.string().email().optional(),
+    contact: Joi.string().min(10).max(14).optional(),
+  });
+  return schema.validate(req);
+}
+
+
+// Update user information route
+router.put("/:id", async (req, res) => {
+  const { error } = validateUserUpdate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  const user = await User.findByIdAndUpdate(
+    req.params.id,
+    _.pick(req.body, ["name", "email", "contact"]),
+    { new: true }
+  );
+
+  if (!user) return res.status(404).send("User not found");
+
+  res.send(user);
+});
+
 
 // Helper function to send the reset code via email
 function sendResetCodeByEmail(email, resetCode) {
