@@ -16,6 +16,16 @@ const goalSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    amountpermonth: {
+      type: Number,
+      required: true,
+    },
+    category: {
+      type: String,
+      required: true,
+    },
+
+
     createdBy: {
       type: String,
     },
