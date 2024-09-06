@@ -13,7 +13,7 @@ const goalSchema = new mongoose.Schema(
       required: true,
     },
     peroid: {
-      type: Number,
+      type: String,
       required: true,
     },
     amountpermonth: {
