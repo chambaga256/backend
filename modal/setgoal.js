@@ -38,7 +38,9 @@ function validateGoal(goal) {
   const schema = {
     goal: Joi.string().required(),
     amount: Joi.number().required(),
-    peroid: Joi.number().required(),
+    peroid: Joi.string().required(),
+    amountpermonth: Joi.number().required(),
+    category: Joi.string().required(),
   };
 
   return (result = Joi.validate(goal, schema));
