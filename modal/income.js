@@ -3,16 +3,17 @@ const Joi = require("joi");
 
 const incomeSchema = new mongoose.Schema(
   {
+    amount: {
+      type: Number,
+      required: true,
+    },
     income: {
       type: String,
       required: true,
       maxlength: 50,
     },
-    amount: {
-      type: Number,
-      required: true,
-    },
-   
+    
+  
     createdBy: {
       type: String,
     },
