@@ -6,9 +6,8 @@ const goalSchema = new mongoose.Schema(
     goal: {
       type: String,
       required: true,
-      maxlength: 50,
+      maxlength: 500,
     },
-
     category: {
       type: String,
       required: true,
@@ -38,8 +37,6 @@ function validateGoal(goal) {
   const schema = {
     goal: Joi.string().required(),
     amount: Joi.number().required(),
-    peroid: Joi.string().required(),
-    amountpermonth: Joi.number().required(),
     category: Joi.string().required(),
   };
 
