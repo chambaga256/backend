@@ -8,23 +8,23 @@ const goalSchema = new mongoose.Schema(
       required: true,
       maxlength: 50,
     },
-    amount: {
-      type: Number,
-      required: true,
-    },
-    peroid: {
-      type: String,
-      required: true,
-    },
-    amountpermonth: {
-      type: Number,
-      required: true,
-    },
+
     category: {
       type: String,
       required: true,
     },
-
+  years: {
+    type: Number,
+ 
+  },
+  months: {
+    type: Number,
+ 
+  },
+     amount: {
+      type: Number,
+      required: true,
+    },
 
     createdBy: {
       type: String,
