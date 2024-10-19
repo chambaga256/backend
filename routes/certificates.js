@@ -445,4 +445,43 @@ router.post("/", async (req, res) => {
   res.status(200).send(certificate);
 });
 
+
+
+// DELETE a certificate by ID
+router.delete("/:id", async (req, res) => {
+  try {
+    // Find the certificate by ID
+    const certificate = await Certificate.findById(req.params.id);
+    if (!certificate) return res.status(404).send("Certificate not found");
+
+    // Remove the certificate from the S3 bucket
+    const s3 = new S3({
+      region: process.env.S3_BUCKET_REGION,
+      credentials: {
+        accessKeyId: process.env.S3_ACCESS_KEY,
+        secretAccessKey: process.env.S3_SECRETACCESS_KEY,
+      },
+    });
+
+    // The S3 key for the certificate file
+    const key = `uibfs/${certificate.pladge}-${certificate.name}-certificate.pdf`;
+
+    await s3.deleteObject({
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: key,
+    }).promise();
+
+    console.log("Certificate deleted from S3 successfully.");
+
+    // Remove the certificate from the database
+    await certificate.remove();
+
+    res.send("Certificate deleted successfully");
+  } catch (error) {
+    console.error("Error deleting certificate:", error);
+    res.status(500).send("Something went wrong");
+  }
+});
+
+
 module.exports = router;
