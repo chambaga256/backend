@@ -386,7 +386,7 @@ router.post("/", async (req, res) => {
   jumpLine(doc, 4);
 
   // Validation liatnk
-  const link = `https://uibfs.s3.eu-north-1.amazonaws.com/certificates/${req.body.pladge}-${req.body.name}-certificate.pdf`;
+  const link = `https://uibfs.s3.eu-north-1.amazonaws.com/uibfs/${req.body.pladge}-${req.body.name}-certificate.pdf`;
 
   doc.image("assets/bankers association.jpg", 100, 450, {
     fit: [200, 100],
