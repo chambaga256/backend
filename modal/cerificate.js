@@ -52,7 +52,13 @@ const certificateSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
-});
+
+  createdBy: {
+    type: String,
+  },
+},
+
+{ timestamps: true });
 
 const Certificate = mongoose.model("Certificate", certificateSchema);
 
