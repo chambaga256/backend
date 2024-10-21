@@ -57,15 +57,15 @@ router.put("/goal/:id", async (req, res) => {
   const decodedToken = decodeToken(token);
 
   // Validate incoming data
-  const { error } = validateGoal(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  // const { error } = validateGoal(req.body);
+  // if (error) return res.status(400).send(error.details[0].message);
 
   try {
     // Find and update the goal, ensuring it's owned by the logged-in user
     const updatedGoal = await Goal.findOneAndUpdate(
       { _id: req.params.id, createdBy: decodedToken._id },
       { ...req.body },
-      { new: true, runValidators: true }
+      { new: true}
     );
 
     if (!updatedGoal) return res.status(404).send("Goal not found");
