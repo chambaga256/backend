@@ -101,4 +101,25 @@ router.delete("/goal/:id", async (req, res) => {
   }
 });
 
+router.put("/:id/status", async (req, res) => {
+  try {
+    const goalId = req.params.id;
+
+    // Find the goal by ID and update its status to true
+    const goal = await Goal.findByIdAndUpdate(
+      goalId,
+      { status: true }, // Update status to true
+      { new: true }     // Return the updated document
+    );
+
+    if (!goal) {
+      return res.status(404).send("Goal not found.");
+    }
+
+    res.send(goal); // Send back the updated goal
+  } catch (error) {
+    res.status(500).send("An error occurred while updating the goal status.");
+  }
+});
+
 module.exports = router;

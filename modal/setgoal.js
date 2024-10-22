@@ -12,19 +12,20 @@ const goalSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-  years: {
-    type: Number,
- 
-  },
-  months: {
-    type: Number,
- 
-  },
-     amount: {
+    years: {
+      type: Number,
+    },
+    months: {
+      type: Number,
+    },
+    amount: {
       type: Number,
       required: true,
     },
-
+    status: {
+      type: Boolean,
+      default: false, // Set the default value to false
+    },
     createdBy: {
       type: String,
     },
@@ -33,6 +34,7 @@ const goalSchema = new mongoose.Schema(
 );
 
 const Goal = mongoose.model("goal", goalSchema);
+
 function validateGoal(goal) {
   const schema = {
     goal: Joi.string().required(),
@@ -40,10 +42,10 @@ function validateGoal(goal) {
     years: Joi.number().required(),
     months: Joi.number().required(),
     category: Joi.string().required(),
-    
+    status: Joi.boolean(), // Add status to the Joi validation schema
   };
 
-  return (result = Joi.validate(goal, schema));
+  return Joi.validate(goal, schema);
 }
 
 module.exports.Goal = Goal;
