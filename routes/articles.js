@@ -1,5 +1,5 @@
 const express = require('express');
-const mongoose = require('mongoose');
+
 const Category = require('../modal/articles'); // Import Category model
 
 // Create Category
