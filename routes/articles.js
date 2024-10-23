@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Category = require('../modal/articles'); // Import Category model
 
 // Create Category
-app.post('/api/categories', async (req, res) => {
+app.post('/categories', async (req, res) => {
   try {
     const newCategory = new Category(req.body);
     await newCategory.save();
@@ -14,7 +14,7 @@ app.post('/api/categories', async (req, res) => {
 });
 
 // Get All Categories
-app.get('/api/categories', async (req, res) => {
+app.get('/categories', async (req, res) => {
   try {
     const categories = await Category.find();
     res.status(200).json(categories);
@@ -24,7 +24,7 @@ app.get('/api/categories', async (req, res) => {
 });
 
 // Update Category
-app.put('/api/categories/:id', async (req, res) => {
+app.put('/categories/:id', async (req, res) => {
   const { id } = req.params;
   try {
     const updatedCategory = await Category.findByIdAndUpdate(id, req.body, { new: true });
@@ -35,7 +35,7 @@ app.put('/api/categories/:id', async (req, res) => {
 });
 
 // Delete Category
-app.delete('/api/categories/:id', async (req, res) => {
+app.delete('/categories/:id', async (req, res) => {
   const { id } = req.params;
   try {
     await Category.findByIdAndDelete(id);
