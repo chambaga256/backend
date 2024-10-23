@@ -13,6 +13,7 @@ const wants = require("./routes/wants");
 const savings = require("./routes/savings");
 const needs = require("./routes/needs");
 const frequencies = require("./routes/frquenceEarnig");
+const articles = require("./routes/articles");
 
 const app = express();
 
@@ -52,6 +53,8 @@ app.use("/api/rules", wants);
 app.use("/api/rules", savings);
 app.use("/api/rules", needs);
 app.use("/api/rules", frequencies);
+
+app.use("/api/articles/",articles);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
