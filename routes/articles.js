@@ -46,3 +46,6 @@ router.delete('/categories/:id', async (req, res) => {
     res.status(400).json({ error: 'Failed to delete category' });
   }
 });
+
+
+module.exports = router;
