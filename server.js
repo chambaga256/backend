@@ -54,7 +54,7 @@ app.use("/api/rules", savings);
 app.use("/api/rules", needs);
 app.use("/api/rules", frequencies);
 
-app.use("/api/articles/",articles);
+app.use("/api/articles",articles);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
