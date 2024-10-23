@@ -2,8 +2,10 @@ const express = require('express');
 
 const Category = require('../modal/articles'); // Import Category model
 
+const router = express.Router()
+
 // Create Category
-app.post('/categories', async (req, res) => {
+router.post('/categories', async (req, res) => {
   try {
     const newCategory = new Category(req.body);
     await newCategory.save();
@@ -14,7 +16,7 @@ app.post('/categories', async (req, res) => {
 });
 
 // Get All Categories
-app.get('/categories', async (req, res) => {
+router.get('/categories', async (req, res) => {
   try {
     const categories = await Category.find();
     res.status(200).json(categories);
@@ -24,7 +26,7 @@ app.get('/categories', async (req, res) => {
 });
 
 // Update Category
-app.put('/categories/:id', async (req, res) => {
+router.put('/categories/:id', async (req, res) => {
   const { id } = req.params;
   try {
     const updatedCategory = await Category.findByIdAndUpdate(id, req.body, { new: true });
@@ -35,7 +37,7 @@ app.put('/categories/:id', async (req, res) => {
 });
 
 // Delete Category
-app.delete('/categories/:id', async (req, res) => {
+router.delete('/categories/:id', async (req, res) => {
   const { id } = req.params;
   try {
     await Category.findByIdAndDelete(id);
