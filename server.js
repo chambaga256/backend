@@ -44,6 +44,8 @@ mongoose
 app.get("/", (req, res) => {
   res.send("Hello, World! This is the home page.");
 });
+
+
 app.use("/api/certificates", certifcates);
 app.use("/api/transactions", transactions);
 app.use("/api/incomes", incomes);
