@@ -4,7 +4,7 @@ const Joi = require("joi");
 const incomeSalary = new mongoose.Schema(
   {
     amount: {
-      type: Number,
+     type: mongoose.Schema.Types.Decimal128,
       required: true,
     },
 
