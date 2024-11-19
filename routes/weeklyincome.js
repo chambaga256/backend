@@ -15,7 +15,7 @@ router.get("/salary", async (req, res) => {
   } else {
     // return all transactions for logged in user
     const decodedToken = decodeToken(token);
-    salaries = await Salary.find({ createdBy: decodedToken._id });
+    salaries = await WeeklyIncome.find({ createdBy: decodedToken._id });
   }
 
   // send all transactions
