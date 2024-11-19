@@ -1,4 +1,4 @@
-const BudgetItem = require("./models/budget");
+const BudgetItem = require("../modal/BudgetItem");
 const router = express.Router();
 
 router.post("/items", async (req, res) => {
@@ -38,7 +38,7 @@ router.get("/items", async (req, res) => {
   router.put("/items/:id", async (req, res) => {
     try {
       const { id } = req.params;
-      const { name, cost } = req.body;
+      const { name, cost, month } = req.body;
   
       const updatedItem = await BudgetItem.findByIdAndUpdate(
         id,
