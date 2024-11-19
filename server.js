@@ -17,7 +17,6 @@ const articles = require("./routes/articles");
 const category = require("./routes/category");
  const budget = require("./routes/budget");
  const weeklyincome = require("./routes/weeklyincome");
-
  const dailycome =require("./routes/dailyincome");
 const app = express();
 

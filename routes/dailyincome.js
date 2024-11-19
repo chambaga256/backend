@@ -1,6 +1,6 @@
 const express = require("express");
 const { decodeToken } = require("../helpers/decodeToken");
-const { DailyIncome, validateDailyIncome} = require("../modal/dailyincome");
+const { DailyIncome, validateDailyIncome} = require("../modal/dailyIncome");
 const router = express.Router();
 // returns all transactions/expenses
 router.get("/salary", async (req, res) => {
