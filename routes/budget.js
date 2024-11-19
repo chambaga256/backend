@@ -59,3 +59,5 @@ router.get("/items", async (req, res) => {
     }
   });
   
+
+  module.exports = router;
