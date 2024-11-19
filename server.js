@@ -16,6 +16,9 @@ const frequencies = require("./routes/frquenceEarnig");
 const articles = require("./routes/articles");
 const category = require("./routes/category");
  const budget = require("./routes/budget");
+ const weeklyincome = require("./routes/weeklyincome");
+
+ const dailycome =require("./routes/dailycome");
 const app = express();
 
 // Middleware to parse form data
@@ -56,10 +59,10 @@ app.use("/api/rules", wants);
 app.use("/api/rules", savings);
 app.use("/api/rules", needs);
 app.use("/api/rules", frequencies);
-
 app.use("/api/articles",articles);
 app.use("/api/category", category)
-
+app.use("/api/weeklyincome", weeklyincome)
+app.use("/api/dailyincome", dailycome)
 app.use("/api",  budget)
 
 app.listen(PORT, () => {
