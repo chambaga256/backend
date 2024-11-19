@@ -15,7 +15,7 @@ const needs = require("./routes/needs");
 const frequencies = require("./routes/frquenceEarnig");
 const articles = require("./routes/articles");
 const category = require("./routes/category");
- 
+ const budget = require("./routes/budget");
 const app = express();
 
 // Middleware to parse form data
@@ -59,6 +59,8 @@ app.use("/api/rules", frequencies);
 
 app.use("/api/articles",articles);
 app.use("/api/category", category)
+
+app.use("/api",  budget)
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
