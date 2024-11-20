@@ -1,21 +1,25 @@
 const express = require("express");
 const { decodeToken } = require("../helpers/decodeToken");
-const { DailyIncome, validateDailyIncome} = require("../modal/dailyIncome");
+const { DailyIncome, validateDailyIncome } = require("../modal/dailyIncome");
+
 const router = express.Router();
+
 // returns all transactions/expenses
 router.get("/salary", async (req, res) => {
   const token = req.header("Authorization");
-  let dailyincome;
+  let salaries;
+
   if (!token) {
     // return all transactions for admin
-    dailyincome = await DailyIncome.find();
+    salaries = await  DailyIncome.find();
   } else {
     // return all transactions for logged in user
     const decodedToken = decodeToken(token);
-    dailyincome = await DailyIncome.find({ createdBy: decodedToken._id });
+    salaries = await  DailyIncome.find({ createdBy: decodedToken._id });
   }
+
   // send all transactions
-  res.send(dailyincome);
+  res.send(salaries);
 });
 
 // create a new transaction/expense
@@ -32,17 +36,17 @@ router.post("/salary", async (req, res) => {
 
   // create a new transaction instance
   const decodedToken = decodeToken(token);
-  const income = new DailyIncomeIncome({
+  const income = new  DailyIncome({
     ...req.body,
     createdBy: decodedToken._id,
   });
 
   try {
     // save the transaction to the database
-    const saveddailyicome = await income.save();
+    const savedSalary = await income.save();
 
     // send the saved transaction as a response
-    res.status(200).send(saveddailyicome);
+    res.status(200).send(savedSalary);
   } catch (err) {
     res.status(500).send("Internal Server Error");
   }
@@ -64,7 +68,7 @@ router.put("/salary/:id", async (req, res) => {
 
   try {
     // Find the salary record by ID and creator to ensure the user can update their own record
-    const salary = await DailyIncome.findOne({
+    const salary = await Salary.findOne({
       _id: req.params.id,
       createdBy: decodedToken._id,
     });
@@ -77,10 +81,10 @@ router.put("/salary/:id", async (req, res) => {
     salary.amount = req.body.amount;
 
     // Save the updated record
-    const updatedailyincome= await salary.save();
+    const updatedSalary = await salary.save();
 
     // Send the updated salary record as a response
-    res.status(200).send(updatedailyincome);
+    res.status(200).send(updatedSalary);
   } catch (err) {
     res.status(500).send("Internal Server Error");
   }
