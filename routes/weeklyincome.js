@@ -6,7 +6,7 @@ const router = express.Router();
 
 // returns all transactions/expenses
 router.get("/salary", async (req, res) => {
-  const token = req.header("Authorization");
+     const token = req.header("Authorization");
   let weeklyincome;
 
   if (!token) {
@@ -14,7 +14,7 @@ router.get("/salary", async (req, res) => {
     salaries = await WeeklyIncome.find();
   } else {
     // return all transactions for logged in user
-    const decodedToken = decodeToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzE3NGU4NzYzNDIxNDA1ZWZjOTNmZWQiLCJuYW1lIjoidWliZnMiLCJjb250YWN0IjoiKzI1NjcwODMxOTA0NiIsImVtYWlsIjoiY2hhbWJhZ2FhYnVkbGFoQGdtYWlsLmNvbSIsImlhdCI6MTczMjAzMTA1N30.8jziL3TBBQktKn_5vTUgePzMdNd_WFYm2P_X6NhBu2Y");
+    const decodedToken = decodeToken(token);
     console.log('eederrrrrrr', decodedToken);
     salaries = await WeeklyIncome.find({ createdBy: decodedToken._id });
   }
