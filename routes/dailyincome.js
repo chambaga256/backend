@@ -8,11 +8,11 @@ router.get("/salary", async (req, res) => {
   let dailyincome;
   if (!token) {
     // return all transactions for admin
-    salaries = await DailyIncome.find();
+    dailyincome = await DailyIncome.find();
   } else {
     // return all transactions for logged in user
     const decodedToken = decodeToken(token);
-    salaries = await DailyIncome.find({ createdBy: decodedToken._id });
+    dailyincome = await DailyIncome.find({ createdBy: decodedToken._id });
   }
   // send all transactions
   res.send(dailyincome);
