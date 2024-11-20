@@ -6,22 +6,24 @@ const router = express.Router();
 
 // returns all transactions/expenses
 router.get("/salary", async (req, res) => {
-  const token = req.header("Authorization");
-  let weeklyincome;
-
-  if (!token) {
-    // return all transactions for admin
-    salaries = await WeeklyIncome.find();
-  } else {
-    // return all transactions for logged in user
-    const decodedToken = decodeToken(token);
-    console.log('eederrrrrrr', decodedToken);
-    salaries = await WeeklyIncome.find({ createdBy: decodedToken._id });
-  }
-
-  // send all transactions
-  res.send(weeklyincome);
-});
+    const token = req.header("Authorization")?.replace("Bearer ", "");
+    let salaries;
+  
+    if (!token) {
+      salaries = await WeeklyIncome.find(); // Admin access
+    } else {
+      const decodedToken = decodeToken(token);
+      if (!decodedToken || !decodedToken._id) {
+        return res.status(401).send("Invalid or expired token");
+      }
+  
+      // Return transactions for the logged-in user
+      salaries = await WeeklyIncome.find({ createdBy: decodedToken._id });
+    }
+  
+    res.send(salaries);
+  });
+  
 
 // create a new transaction/expense
 router.post("/salary", async (req, res) => {
