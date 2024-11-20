@@ -6,21 +6,20 @@ const router = express.Router();
 
 // returns all transactions/expenses
 router.get("/salary", async (req, res) => {
-     const token = req.header("Authorization");
-  let weeklyincome;
+  const token = req.header("Authorization");
+  let salaries;
 
   if (!token) {
     // return all transactions for admin
-    weeklyincome= await WeeklyIncome.find();
+    salaries = await WeeklyIncome.find();
   } else {
     // return all transactions for logged in user
     const decodedToken = decodeToken(token);
-    console.log('eederrrrrrr', decodedToken);
-    weeklyincome = await WeeklyIncome.find({ createdBy: decodedToken._id });
+    salaries = await WeeklyIncome.find({ createdBy: decodedToken._id });
   }
 
   // send all transactions
-  res.send(weeklyincome);
+  res.send(salaries);
 });
 
 // create a new transaction/expense
@@ -44,10 +43,10 @@ router.post("/salary", async (req, res) => {
 
   try {
     // save the transaction to the database
-    const savedweeklyicome = await income.save();
+    const savedSalary = await income.save();
 
     // send the saved transaction as a response
-    res.status(200).send(savedweeklyicome);
+    res.status(200).send(savedSalary);
   } catch (err) {
     res.status(500).send("Internal Server Error");
   }
@@ -69,7 +68,7 @@ router.put("/salary/:id", async (req, res) => {
 
   try {
     // Find the salary record by ID and creator to ensure the user can update their own record
-    const salary = await WeeklyIncome.findOne({
+    const salary = await Salary.findOne({
       _id: req.params.id,
       createdBy: decodedToken._id,
     });
@@ -82,10 +81,10 @@ router.put("/salary/:id", async (req, res) => {
     salary.amount = req.body.amount;
 
     // Save the updated record
-    const updateweeklyincome= await salary.save();
+    const updatedSalary = await salary.save();
 
     // Send the updated salary record as a response
-    res.status(200).send(updateweeklyincome);
+    res.status(200).send(updatedSalary);
   } catch (err) {
     res.status(500).send("Internal Server Error");
   }
