@@ -51,10 +51,13 @@ router.post("/items", authenticateToken, async (req, res) => {
 
 // GET: Retrieve items by month for logged-in user
 router.get("/items", authenticateToken, async (req, res) => {
+
+  const token = req.header("Authorization");
   try {
+    const decodedToken = decodeToken(token);
     const { month } = req.query;
 
-    const query = { createdBy: req.user.id }; // Only fetch items created by the logged-in user
+    const query = { createdBy:decodedToken._id }; // Only fetch items created by the logged-in user
     if (month) {
       query.month = month; // Add month filter if provided
     }
