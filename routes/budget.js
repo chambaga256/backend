@@ -25,14 +25,17 @@ const authenticateToken = (req, res, next) => {
 
 // POST: Add a new budget item
 router.post("/items", authenticateToken, async (req, res) => {
+
+  const token = req.header("Authorization");
   try {
+   const decodedToken = decodeToken(token);
     const { name, cost, month } = req.body;
 
     const newItem = new BudgetItem({
       name,
       cost,
       month: month || undefined, // Default month is handled in the schema
-      createdBy: req.user.id, // Use the user ID from the token as the creator
+      createdBy: decodedToken._id, // Use the user ID from the token as the creator
     });
 
     await newItem.save();
