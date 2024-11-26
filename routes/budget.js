@@ -72,12 +72,14 @@ router.get("/items", authenticateToken, async (req, res) => {
 
 // PUT: Update an existing budget item
 router.put("/items/:id", authenticateToken, async (req, res) => {
+  const token = req.header("Authorization");
   try {
     const { id } = req.params;
+    const decodedToken = decodeToken(token);
     const { name, cost, month } = req.body;
 
     // Ensure the item belongs to the logged-in user
-    const item = await BudgetItem.findOne({ _id: id, createdBy: req.user.id });
+    const item = await BudgetItem.findOne({ _id: id, createdBy:  decodedToken });
 
     if (!item) {
       return res.status(404).json({ error: "Item not found or access denied." });
@@ -100,11 +102,13 @@ router.put("/items/:id", authenticateToken, async (req, res) => {
 
 // DELETE: Delete an item
 router.delete("/items/:id", authenticateToken, async (req, res) => {
+  const token = req.header("Authorization");
   try {
+    const decodedToken = decodeToken(token);
     const { id } = req.params;
 
     // Ensure the item belongs to the logged-in user
-    const item = await BudgetItem.findOneAndDelete({ _id: id, createdBy: req.user.id });
+    const item = await BudgetItem.findOneAndDelete({ _id: id, createdBy: decodedToken });
 
     if (!item) {
       return res.status(404).json({ error: "Item not found or access denied." });
