@@ -19,6 +19,9 @@ const BudgetItemSchema = new mongoose.Schema({
       return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
     },
   },
+  createdBy: {
+    type: String,
+  },
 }, {
   timestamps: true,
 });
