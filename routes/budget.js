@@ -1,5 +1,5 @@
 const express = require("express");
-const BudgetItem = require("../modal/BudgetItem");
+const BudgetItem = require("../modals/BudgetItem");
 const { decodeToken } = require("../helpers/decodeToken");
 const router = express.Router();
 

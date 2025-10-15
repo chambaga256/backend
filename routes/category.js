@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const category = require("../modal/category");
+const category = require("../modals/category");
 
 router.post('/categories', async (req, res) => {
     try {

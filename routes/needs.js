@@ -1,7 +1,7 @@
 const express = require("express");
 const { decodeToken } = require("../helpers/decodeToken");
 
-const { Needs, validateNeeds } = require("../modal/need");
+const { Needs, validateNeeds } = require("../modals/need");
 
 const router = express.Router();
 

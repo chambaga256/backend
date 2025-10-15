@@ -1,6 +1,6 @@
 const express = require("express");
-const { Transaction, validateTransaction } = require("../modal/transaction");
-const { decodeToken } = require("../helpers/decodeToken");
+const { Transaction, validateTransaction } = require("../modals/Transaction");
+const { decodeToken } = require("../helpers/auth");
 
 const router = express.Router();
 

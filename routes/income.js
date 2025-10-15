@@ -1,6 +1,6 @@
 const express = require("express");
 const { decodeToken } = require("../helpers/decodeToken");
-const { Income, validateIncome } = require("../modal/income");
+const { Income, validateIncome } = require("../modals/income");
 
 const router = express.Router();
 

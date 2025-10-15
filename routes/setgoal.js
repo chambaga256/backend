@@ -1,6 +1,6 @@
 const express = require("express");
 const { decodeToken } = require("../helpers/decodeToken");
-const { validateGoal, Goal } = require("../modal/setgoal");
+const { validateGoal, Goal } = require("../modals/setgoal");
 
 const router = express.Router();
 

@@ -1,6 +1,6 @@
 const express = require('express');
 
-const Category = require('../modal/articles'); // Import Category model
+const Category = require('../modals/articles'); // Import Category model
 
 const router = express.Router()
 

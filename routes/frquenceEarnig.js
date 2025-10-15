@@ -1,10 +1,10 @@
 const express = require("express");
 const { decodeToken } = require("../helpers/decodeToken");
-const { Salary, validateSalary } = require("../modal/frquenceEarnig");
+const { Salary, validateSalary } = require("../modals/frquenceEarnig");
 const {
   validateFrequencyArray,
   Frequency,
-} = require("../modal/frquenceEarnig");
+} = require("../modals/frquenceEarnig");
 
 const router = express.Router();
 

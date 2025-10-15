@@ -3,7 +3,7 @@ const { S3 } = require("@aws-sdk/client-s3");
 const PDFDocument = require("pdfkit");
 const QRCode = require("qrcode");
 const fs = require("fs");
-const { Certificate, validateCertifacte } = require("../modal/cerificate");
+const { Certificate, validateCertifacte } = require("../modals/cerificate");
 
 const nodemailer = require("nodemailer");
 const express = require("express");

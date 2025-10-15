@@ -23,7 +23,7 @@ const transactionSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Transaction = mongoose.model("Transaction", transactionSchema);
+const Transaction = mongoose.model("transaction", transactionSchema);
 function validateTransaction(transaction) {
   const schema = {
     item: Joi.string().required(),

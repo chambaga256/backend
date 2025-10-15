@@ -1,4 +1,4 @@
-const { User, validateUser } = require("../modal/user");
+const { User, validateUser } = require("../modals/user");
 const _ = require("lodash");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");

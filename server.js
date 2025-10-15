@@ -19,7 +19,10 @@ const category = require("./routes/category");
  const weeklyincome = require("./routes/weeklyincome");
  const dailycome =require("./routes/dailyincome");
 const mySavings = require("./routes/mysavings");
+const accounts = require("./routes/accounts");
+const walletTxns = require("./routes/transactions");
 const app = express();
+
 
 // Middleware to parse form data
 app.use(cors());
@@ -65,6 +68,8 @@ app.use("/api/weeklyincome", weeklyincome)
 app.use("/api/dailyincome", dailycome)
 app.use("/api",  budget)
 app.use("/api",  mySavings)
+app.use("/api/accounts", accounts);
+app.use("/api/transactions", walletTxns);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
