@@ -20,7 +20,7 @@ const category = require("./routes/category");
  const dailycome =require("./routes/dailyincome");
 const mySavings = require("./routes/mysavings");
 const accounts = require("./routes/accounts");
-const walletTxns = require("./routes/transactions");
+const walletTxns = require("./routes/transaction");
 const app = express();
 
 
