@@ -53,7 +53,7 @@ app.get("/", (req, res) => {
 
 
 app.use("/api/certificates", certifcates);
-app.use("/api/transactions", transactions);
+// app.use("/api/transactions", transactions);
 app.use("/api/incomes", incomes);
 app.use("/api/salaries", salaries);
 app.use("/api/goal", gaols);
