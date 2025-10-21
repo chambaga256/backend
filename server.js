@@ -21,6 +21,7 @@ const category = require("./routes/category");
 const mySavings = require("./routes/mysavings");
 const accounts = require("./routes/accounts");
 const walletTxns = require("./routes/transaction");
+const budgetRoutes = require("./routes/budgets");
 const app = express();
 
 
@@ -70,6 +71,7 @@ app.use("/api",  budget)
 app.use("/api",  mySavings)
 app.use("/api/accounts", accounts);
 app.use("/api/transactions", walletTxns);
+app.use("/api", budgetRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
