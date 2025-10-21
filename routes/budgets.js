@@ -9,7 +9,7 @@ const { decodeToken } = require("../helpers/decodeToken");
 
 const router = express.Router();
 
-// ---------- auth helper ----------
+// ---- auth ----
 function requireUser(req, res) {
   const raw = req.header("Authorization");
   if (!raw) { res.status(401).send("Unauthorized"); return null; }
@@ -17,7 +17,7 @@ function requireUser(req, res) {
   try { return decodeToken(token); } catch { res.status(401).send("Invalid token"); return null; }
 }
 
-// ---------- helpers ----------
+// ---- helpers ----
 async function sumAllocations(budgetId, userId) {
   const rows = await Envelope.aggregate([
     { $match: { budgetId: new mongoose.Types.ObjectId(budgetId), createdBy: new mongoose.Types.ObjectId(userId) } },
@@ -26,54 +26,65 @@ async function sumAllocations(budgetId, userId) {
   return rows[0]?.total || 0;
 }
 
-// ---------- GET /api/budget ----------
+async function refreshBudgetTotals(budgetId, userId) {
+  const b = await Budget.findOne({ _id: budgetId, createdBy: userId });
+  if (!b) return null;
+  const totalAllocated = await sumAllocations(budgetId, userId);
+  const remainingBudget = (b.targetSavings || 0) - totalAllocated; // can be negative (overspend allowed)
+  // persist convenience fields so UI can read fast
+  b.totalAllocated = totalAllocated;
+  b.remainingBudget = remainingBudget;
+  await b.save();
+  return { currency: b.currency, budgetAmount: b.targetSavings || 0, totalAllocated, remainingBudget };
+}
+
+// ---- GET /api/budget ----
 router.get("/budget", async (req, res) => {
   const user = requireUser(req, res); if (!user) return;
   const items = await Budget.find({ createdBy: user._id }).sort({ periodStart: -1 }).lean();
   res.send({ success: true, data: items });
 });
 
-// ---------- POST /api/budget ----------
+// ---- POST /api/budget ----
 router.post("/budget", async (req, res) => {
   const user = requireUser(req, res); if (!user) return;
   const { name, currency, periodStart, periodEnd, targetSavings = 0, accountId } = req.body;
   if (!name || !currency || !periodStart || !periodEnd)
     return res.status(400).send("name, currency, periodStart, periodEnd are required");
   const doc = await Budget.create({
-    name, currency, periodStart, periodEnd, targetSavings,
-    accountId: accountId || undefined, createdBy: user._id,
+    name,
+    currency,
+    periodStart,
+    periodEnd,
+    targetSavings,
+    accountId: accountId || undefined,
+    createdBy: user._id,
+    totalAllocated: 0,
+    remainingBudget: targetSavings
   });
   res.status(201).send({ success: true, data: doc });
 });
 
-// ---------- GET /api/budget/:id ----------
+// ---- GET /api/budget/:id ----
 router.get("/budget/:id", async (req, res) => {
   const user = requireUser(req, res); if (!user) return;
   const b = await Budget.findOne({ _id: req.params.id, createdBy: user._id }).lean();
   if (!b) return res.status(404).send("Not found");
   const envelopes = await Envelope.find({ budgetId: b._id, createdBy: user._id }).lean();
   const totalAllocated = await sumAllocations(b._id, user._id);
-  const remainingBudget = Math.max(0, (b.targetSavings || 0) - totalAllocated);
-  res.send({ success: true, data: { ...b, envelopes, totals: { totalAllocated, remainingBudget } } });
+  const remainingBudget = (b.targetSavings || 0) - totalAllocated;
+  res.send({
+    success: true,
+    data: { ...b, envelopes },
+    totals: { currency: b.currency, budgetAmount: b.targetSavings || 0, totalAllocated, remainingBudget }
+  });
 });
 
-// ---------- PUT /api/budget/:id ----------
+// ---- PUT /api/budget/:id ----
 router.put("/budget/:id", async (req, res) => {
   const user = requireUser(req, res); if (!user) return;
   const patch = (({ name, currency, periodStart, periodEnd, targetSavings, accountId, closed }) =>
     ({ name, currency, periodStart, periodEnd, targetSavings, accountId, closed }))(req.body);
-
-  // If targetSavings is being reduced, ensure it's not below already allocated
-  if (typeof patch.targetSavings === "number") {
-    const alreadyAllocated = await sumAllocations(req.params.id, user._id);
-    if (patch.targetSavings < alreadyAllocated) {
-      return res.status(400).json({
-        success: false,
-        code: "TARGET_BELOW_ALLOCATIONS",
-        message: `Target (${patch.targetSavings}) is below current allocated total (${alreadyAllocated}).`,
-      });
-    }
-  }
 
   const b = await Budget.findOneAndUpdate(
     { _id: req.params.id, createdBy: user._id },
@@ -81,10 +92,13 @@ router.put("/budget/:id", async (req, res) => {
     { new: true }
   );
   if (!b) return res.status(404).send("Not found");
-  res.send({ success: true, data: b });
+
+  // recompute totals after any change
+  const totals = await refreshBudgetTotals(b._id, user._id);
+  res.send({ success: true, data: b, totals });
 });
 
-// ---------- DELETE /api/budget/:id ----------
+// ---- DELETE /api/budget/:id ----
 router.delete("/budget/:id", async (req, res) => {
   const user = requireUser(req, res); if (!user) return;
   const b = await Budget.findOneAndDelete({ _id: req.params.id, createdBy: user._id });
@@ -93,7 +107,8 @@ router.delete("/budget/:id", async (req, res) => {
   res.send({ success: true, data: true });
 });
 
-// ---------- POST /api/budget/:id/envelopes ----------
+// ---- POST /api/budget/:id/envelopes ----
+// Allow over-allocation; return warning & updated totals; also persist remainingBudget on Budget.
 router.post("/budget/:id/envelopes", async (req, res) => {
   const user = requireUser(req, res); if (!user) return;
   const budget = await Budget.findOne({ _id: req.params.id, createdBy: user._id });
@@ -103,19 +118,6 @@ router.post("/budget/:id/envelopes", async (req, res) => {
   if (!name || typeof allocation !== "number" || allocation < 0)
     return res.status(400).send("name and numeric allocation are required");
 
-  const currentAllocated = await sumAllocations(budget._id, user._id);
-  const newTotal = currentAllocated + allocation;
-
-  if (newTotal > (budget.targetSavings || 0)) {
-    const remaining = Math.max(0, (budget.targetSavings || 0) - currentAllocated);
-    return res.status(400).json({
-      success: false,
-      code: "OVER_BUDGET",
-      message: `Cannot allocate ${allocation}. Remaining budget is ${remaining}. You have spent beyond your budget.`,
-      details: { remainingBudget: remaining, currentAllocated, budgetAmount: budget.targetSavings || 0 }
-    });
-  }
-
   const env = await Envelope.create({
     name,
     allocation,
@@ -124,52 +126,54 @@ router.post("/budget/:id/envelopes", async (req, res) => {
     createdBy: user._id,
   });
 
-  // return totals for UI after creation
-  const totalAllocated = newTotal;
-  const remainingBudget = Math.max(0, (budget.targetSavings || 0) - totalAllocated);
+  const totals = await refreshBudgetTotals(budget._id, user._id);
+  const over = totals.remainingBudget < 0;
 
   res.status(201).send({
     success: true,
     data: env,
-    totals: { totalAllocated, remainingBudget }
+    totals,
+    warning: over ? {
+      code: "OVER_BUDGET",
+      message: `You overspent beyond your budget by ${Math.abs(totals.remainingBudget)}`
+    } : undefined
   });
 });
 
-// ---------- PUT /api/envelopes/:envId ----------
+// ---- PUT /api/envelopes/:envId ----
+// Allow increasing allocation beyond budget; return warning & updated totals.
 router.put("/envelopes/:envId", async (req, res) => {
   const user = requireUser(req, res); if (!user) return;
-  const { name, allocation } = req.body;
-
   const envOld = await Envelope.findOne({ _id: req.params.envId, createdBy: user._id });
   if (!envOld) return res.status(404).send("Envelope not found");
 
-  // If allocation is changing, enforce budget cap
-  if (typeof allocation === "number" && allocation >= 0) {
-    const budget = await Budget.findOne({ _id: envOld.budgetId, createdBy: user._id });
-    const currentAllocated = await sumAllocations(envOld.budgetId, user._id);
-    const newTotal = currentAllocated - (envOld.allocation || 0) + allocation;
-
-    if (newTotal > (budget.targetSavings || 0)) {
-      const remaining = Math.max(0, (budget.targetSavings || 0) - (currentAllocated - (envOld.allocation || 0)));
-      return res.status(400).json({
-        success: false,
-        code: "OVER_BUDGET",
-        message: `Cannot set allocation to ${allocation}. Remaining budget is ${remaining}. You have spent beyond your budget.`,
-        details: { remainingBudget: remaining, newTotal, budgetAmount: budget.targetSavings || 0 }
-      });
-    }
-  }
+  const { name, allocation } = req.body;
+  const update = {};
+  if (typeof name === "string" && name.trim()) update.name = name.trim();
+  if (typeof allocation === "number" && allocation >= 0) update.allocation = allocation;
 
   const env = await Envelope.findOneAndUpdate(
-    { _id: req.params.envId, createdBy: user._id },
-    { $set: { ...(name ? { name } : {}), ...(typeof allocation === "number" ? { allocation } : {}) } },
+    { _id: envOld._id, createdBy: user._id },
+    { $set: update },
     { new: true }
   );
 
-  res.send({ success: true, data: env });
+  const totals = await refreshBudgetTotals(env.budgetId, user._id);
+  const over = totals.remainingBudget < 0;
+
+  res.send({
+    success: true,
+    data: env,
+    totals,
+    warning: over ? {
+      code: "OVER_BUDGET",
+      message: `You overspent beyond your budget by ${Math.abs(totals.remainingBudget)}`
+    } : undefined
+  });
 });
 
-// ---------- POST /api/envelopes/:envId/transactions ----------
+// ---- POST /api/envelopes/:envId/transactions ----
+// Allow spending beyond envelope allocation; return warning & updated envelope + budget totals.
 router.post("/envelopes/:envId/transactions", async (req, res) => {
   const user = requireUser(req, res); if (!user) return;
   const env = await Envelope.findOne({ _id: req.params.envId, createdBy: user._id });
@@ -183,17 +187,6 @@ router.post("/envelopes/:envId/transactions", async (req, res) => {
   if (!acc) return res.status(404).send("Account not found");
   if (acc.currency !== env.currency) return res.status(400).send("Currency mismatch");
 
-  // Guard: prevent overspend on this envelope
-  if (kind === "expense" && (Number(env.spent || 0) + Number(amount)) > Number(env.allocation || 0)) {
-    const remaining = Math.max(0, Number(env.allocation || 0) - Number(env.spent || 0));
-    return res.status(400).json({
-      success: false,
-      code: "OVER_ENVELOPE",
-      message: `This spend exceeds the envelope allocation. Remaining: ${remaining}. You have spent beyond your budget.`,
-      details: { remainingEnvelope: remaining }
-    });
-  }
-
   const txn = await Transaction.create({
     kind,
     accountId: acc._id,
@@ -206,17 +199,37 @@ router.post("/envelopes/:envId/transactions", async (req, res) => {
     createdBy: user._id,
   });
 
-  // Apply effects
   const delta = kind === "income" ? amount : -amount;
   await Account.updateOne({ _id: acc._id, createdBy: user._id }, { $inc: { balance: delta } });
   if (kind === "expense") {
     await Envelope.updateOne({ _id: env._id, createdBy: user._id }, { $inc: { spent: amount } });
   }
 
-  res.status(201).send({ success: true, data: txn });
+  // recompute envelope + budget totals
+  const envAfter = await Envelope.findOne({ _id: env._id, createdBy: user._id }).lean();
+  const totals = await refreshBudgetTotals(env.budgetId, user._id);
+
+  const overEnvelope = kind === "expense" && (Number(envAfter.spent || 0) > Number(envAfter.allocation || 0));
+  res.status(201).send({
+    success: true,
+    data: txn,
+    envelope: {
+      allocation: envAfter.allocation,
+      spent: envAfter.spent,
+      remaining: (envAfter.allocation || 0) - (envAfter.spent || 0),
+      currency: envAfter.currency
+    },
+    totals,
+    warning: (overEnvelope || totals.remainingBudget < 0) ? {
+      code: overEnvelope ? "OVER_ENVELOPE" : "OVER_BUDGET",
+      message: overEnvelope
+        ? `You overspent this envelope by ${Math.abs((envAfter.allocation || 0) - (envAfter.spent || 0))}`
+        : `You overspent beyond your budget by ${Math.abs(totals.remainingBudget)}`
+    } : undefined
+  });
 });
 
-// ---------- GET /api/budget/:id/summary ----------
+// ---- GET /api/budget/:id/summary ----
 router.get("/budget/:id/summary", async (req, res) => {
   const user = requireUser(req, res); if (!user) return;
   const budget = await Budget.findOne({ _id: req.params.id, createdBy: user._id }).lean();
@@ -230,7 +243,7 @@ router.get("/budget/:id/summary", async (req, res) => {
     name: e.name,
     allocation: e.allocation,
     spent: e.spent,
-    remaining: Math.max(0, (e.allocation || 0) - (e.spent || 0)),
+    remaining: (e.allocation || 0) - (e.spent || 0),
     currency: e.currency,
     budgetName: budget.name,
     periodStart: budget.periodStart,
@@ -239,7 +252,7 @@ router.get("/budget/:id/summary", async (req, res) => {
 
   const totalAllocated = data.reduce((s, x) => s + Number(x.allocation || 0), 0);
   const totalSpent = data.reduce((s, x) => s + Number(x.spent || 0), 0);
-  const remainingBudget = Math.max(0, (budget.targetSavings || 0) - totalAllocated);
+  const remainingBudget = (budget.targetSavings || 0) - totalAllocated; // can be negative
 
   res.send({
     success: true,
@@ -249,8 +262,12 @@ router.get("/budget/:id/summary", async (req, res) => {
       budgetAmount: budget.targetSavings || 0,
       totalAllocated,
       totalSpent,
-      remainingBudget,
+      remainingBudget
     },
+    warning: remainingBudget < 0 ? {
+      code: "OVER_BUDGET",
+      message: `You overspent beyond your budget by ${Math.abs(remainingBudget)}`
+    } : undefined
   });
 });
 
